@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Faculty Program · CME Course Builder</title>
+  <meta name="description" content="A talent agency for exceptional clinician-educators — we design the course, find the provider, run the promotion, negotiate the production budget, and pursue accreditation so you can teach." />
+  <style>
+  /* ===== "Clinical Clarity" design system (inlined from the app) ===== */
+  :root {
+    --teal-900: #0b3b3a; --teal-700: #0f766e; --teal-600: #0d8577; --teal-50: #ecfdf9;
+    --ink: #0f1720; --ink-2: #334155; --muted: #64748b; --line: #e2e8f0; --line-2: #cbd5e1;
+    --bg: #f5f7f9; --card: #ffffff; --shield: #6d28d9;
+    --ok: #15803d; --ok-bg: #f0fdf4; --warn: #b45309; --warn-bg: #fffbeb; --bad: #b91c1c; --bad-bg: #fef2f2;
+    --radius: 12px; --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(16,23,32,.06), 0 8px 24px rgba(16,23,32,.06);
+    --shadow-sm: 0 1px 2px rgba(16,23,32,.08);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  a { color: var(--teal-700); }
+
+  .appbar { background: var(--teal-900); color: #e8fffb; display: flex; align-items: center; gap: 16px; padding: 0 22px; height: 56px; position: sticky; top: 0; z-index: 20; }
+  .appbar .brand { font-weight: 700; letter-spacing: .2px; display: flex; align-items: center; gap: 9px; color: inherit; text-decoration: none; }
+  .appbar .brand .logo { width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg, var(--teal-600), #34d3b5); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+  .appbar .spacer { flex: 1; }
+  .appbar .appbtn { color: #d6fff6; text-decoration: none; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; white-space: nowrap; }
+  .appbar .appbtn:hover { background: rgba(255,255,255,.12); }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 22px 64px; }
+  .rail-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin: 2px 0 12px; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px; margin-bottom: 16px; }
+  .card h3 { margin: 0 0 4px; font-size: 15px; }
+  .hint { color: var(--muted); font-size: 13px; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 5px; }
+  .req { color: var(--bad); }
+  .input, .select, .textarea { width: 100%; padding: 9px 11px; border: 1px solid var(--line-2); border-radius: var(--radius-sm); font: inherit; font-size: 14px; color: var(--ink); background: #fff; }
+  .textarea { min-height: 78px; resize: vertical; }
+  .input:focus, .select:focus, .textarea:focus { outline: 2px solid var(--teal-600); outline-offset: 1px; border-color: var(--teal-600); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+  .flag { display: flex; align-items: center; gap: 7px; font-size: 13px; padding: 6px 9px; border-radius: 6px; margin-top: 6px; }
+  .flag.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid #fde68a; }
+  .flag.ok { background: var(--ok-bg); color: var(--ok); border: 1px solid #bbf7d0; }
+
+  .btn { font: inherit; font-size: 14px; border-radius: var(--radius-sm); padding: 9px 15px; border: 1px solid var(--line-2); background: #fff; color: var(--ink); cursor: pointer; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; }
+  .btn:hover { background: #f8fafc; }
+  .btn.primary { background: var(--teal-700); border-color: var(--teal-700); color: #fff; }
+  .btn.primary:hover { background: var(--teal-600); }
+  .btn.primary:disabled { background: #94a3b8; border-color: #94a3b8; cursor: not-allowed; }
+
+  .hero { background: linear-gradient(135deg, var(--teal-900), var(--teal-700)); color: #eafff9; border-radius: 18px; padding: 38px 36px; margin-bottom: 30px; }
+  .hero h1 { font-size: 30px; margin: 0 0 10px; letter-spacing: -.02em; }
+  .hero p { font-size: 16px; color: #b9f1e6; max-width: 70ch; margin: 0 0 6px; }
+  .hero .tags { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero .tags span { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18); padding: 5px 12px; border-radius: 999px; font-size: 13px; }
+
+  .note { font-size: 13px; color: var(--muted); margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .step-kicker { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .fc-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+  .fc-foot .btn { flex: none; }
+
+  .concepts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .concept { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px; }
+  .concept .ic { font-size: 22px; }
+  .concept h3 { margin: 8px 0 4px; font-size: 15px; }
+  .concept p { margin: 0; font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <span class="brand">
+      <span class="logo" aria-hidden="true">✚</span> CME Course Builder
+    </span>
+    <span class="spacer"></span>
+    <a class="appbtn" href="#apply">Apply</a>
+  </header>
+
+  <div class="wrap">
+    <!-- Hero -->
+    <div class="hero">
+      <h1>A talent agency for clinician-educators</h1>
+      <p>
+        You&rsquo;re at the top of your field &mdash; and you can <em>teach</em>.
+        We turn that rare combination into accredited CME that reaches the
+        clinicians who need it, and earns you a real share of the upside. We
+        design the course, find and negotiate your provider, run the promotion,
+        and raise your production values &mdash; so you can do the part only you
+        can do.
+      </p>
+      <div class="tags">
+        <span>AI + market data</span>
+        <span>Strong revenue share</span>
+        <span>3+ year promotion</span>
+        <span>Pursuing ACCME accreditation</span>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="rail-label">How it works</div>
+    <div class="concepts" style="margin-top: 12px;">
+      <div class="concept">
+        <div class="ic" aria-hidden="true">🧭</div>
+        <div class="step-kicker">01 · Concept</div>
+        <h3>We design the course with you</h3>
+        <p>AI plus our market data on what clinicians are actually building turns your expertise into a course concept with a real audience &mdash; not a guess. You bring the medicine and the voice; we shape the rest.</p>
+      </div>
+      <div class="concept">
+        <div class="ic" aria-hidden="true">🤝</div>
+        <div class="step-kicker">02 · Provider</div>
+        <h3>We find your provider &amp; negotiate</h3>
+        <p>We match the concept to the right accredited provider and pitch it for you &mdash; then negotiate hard for a strong revenue share in the course&rsquo;s success, so your upside scales with its reach.</p>
+      </div>
+      <div class="concept">
+        <div class="ic" aria-hidden="true">📣</div>
+        <div class="step-kicker">03 · Promotion</div>
+        <h3>We promote it &mdash; for years</h3>
+        <p>Targeted promotion through your social channels and networks, plus our own communities and websites. A good course markets for 3+ years, and every new course you make gets easier to launch on the platform we build together.</p>
+      </div>
+      <div class="concept">
+        <div class="ic" aria-hidden="true">🎖️</div>
+        <div class="step-kicker">04 · Accreditation</div>
+        <h3>We&rsquo;re earning ACCME accreditation</h3>
+        <p>We&rsquo;re pursuing ACCME accreditation ourselves so that, over time, we can take the middle out of the middle &mdash; more of the value, and more control over quality, staying with you and your course.</p>
+      </div>
+    </div>
+
+    <!-- Who we look for -->
+    <div class="card">
+      <h3 style="margin-top: 0;">Who we&rsquo;re looking for</h3>
+      <p style="margin-top: 0;">
+        We&rsquo;re selective on purpose. We partner with a small number of
+        truly unique clinicians &mdash; people who are at the top of their field
+        <strong>and</strong> are empathetic, natural teachers. The second half
+        matters as much as the first.
+      </p>
+      <ul style="margin: 10px 0 0; padding-left: 18px; line-height: 1.8;">
+        <li><strong>Expertise others seek out.</strong> Colleagues already come to you with the hard questions in your area.</li>
+        <li><strong>A natural teacher.</strong> You make complicated things click, and people remember how you explained it.</li>
+        <li><strong>Empathy for the learner.</strong> You teach to where clinicians actually are, not to show what you know.</li>
+        <li><strong>Something to say.</strong> A point of view, a method, or a gap in your field you&rsquo;re uniquely placed to close.</li>
+      </ul>
+    </div>
+
+    <!-- What we help with -->
+    <div class="rail-label">What we help you with</div>
+    <div class="concepts" style="margin-top: 12px;">
+      <div class="concept">
+        <div class="ic" aria-hidden="true">🎬</div>
+        <h3>Production values</h3>
+        <p>We raise the bar on how your course looks and feels &mdash; lighting, audio, editing, the things that separate a memorable course from a forgettable webinar.</p>
+      </div>
+      <div class="concept">
+        <div class="ic" aria-hidden="true">💰</div>
+        <h3>Budget for content that shines</h3>
+        <p>You shouldn&rsquo;t have to fund great production alone. We negotiate with the provider for support &mdash; or for the cost of making content that will truly shine &mdash; so the budget matches the quality of your teaching.</p>
+      </div>
+      <div class="concept">
+        <div class="ic" aria-hidden="true">🧩</div>
+        <h3>Curriculum design</h3>
+        <p>Consulting on structure, learning objectives, and assessment so your knowledge becomes a course that actually changes practice &mdash; and clears ACCME&rsquo;s bar by design.</p>
+      </div>
+      <div class="concept">
+        <div class="ic" aria-hidden="true">🎤</div>
+        <h3>Training &amp; coaching</h3>
+        <p>On-camera presence, narrative, and teaching craft. Being brilliant and being a great teacher are different skills &mdash; we help you grow the second one.</p>
+      </div>
+    </div>
+
+    <!-- Application -->
+    <div class="card" id="apply">
+      <div id="form-view">
+        <h3 style="margin-top: 0;">Apply to the faculty program</h3>
+        <p class="hint" style="margin: 0 0 18px;">
+          Tell us who you are and what you&rsquo;d love to teach. Nothing here is
+          binding &mdash; it starts a conversation. <span class="req">*</span>
+          marks the four things we genuinely need.
+        </p>
+
+        <form id="apply-form" novalidate>
+          <div class="row2">
+            <div class="field">
+              <label for="fac-name">Full name <span class="req">*</span></label>
+              <input class="input" id="fac-name" name="name" placeholder="Dr. Jane Okafor" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="fac-email">Email <span class="req">*</span></label>
+              <input class="input" id="fac-email" name="email" type="email" placeholder="jane@example.com" autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="fac-field">Clinical specialty / field <span class="req">*</span></label>
+              <input class="input" id="fac-field" name="field" placeholder="e.g. Endocrinology, Emergency Medicine, Palliative Care" />
+            </div>
+            <div class="field">
+              <label for="fac-title">Current role &amp; institution</label>
+              <input class="input" id="fac-title" name="title" placeholder="Attending &amp; Asst. Professor, Mercy Health" />
+              <p class="hint" style="margin: 5px 0 0;">Where you practice or teach today.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="fac-links">Links</label>
+            <textarea class="textarea" id="fac-links" name="links" rows="2" placeholder="https://linkedin.com/in/…  ·  https://youtube.com/…"></textarea>
+            <p class="hint" style="margin: 5px 0 0;">LinkedIn, a personal site, social profiles, or a sample of you teaching (talk, video, lecture). Anything that shows your work.</p>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="fac-reach">Audience / following</label>
+              <input class="input" id="fac-reach" name="reach" placeholder="e.g. 18k on X, active in 2 specialty societies" />
+              <p class="hint" style="margin: 5px 0 0;">Roughly where and how big &mdash; it helps us plan promotion, but it is not a gate.</p>
+            </div>
+            <div class="field">
+              <label for="fac-exp">Have you taught CME before?</label>
+              <select class="select" id="fac-exp" name="cmeExperience">
+                <option value="">Select…</option>
+                <option value="none">No — this would be my first</option>
+                <option value="some">Some — a course or two</option>
+                <option value="extensive">Extensive — I teach CME regularly</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="fac-idea">What would you love to teach? <span class="req">*</span></label>
+            <textarea class="textarea" id="fac-idea" name="courseIdea" rows="4" placeholder="The clinical area, the learners you'd reach, and why now…"></textarea>
+            <p class="hint" style="margin: 5px 0 0;">The course you wish existed, the thing colleagues always ask you about, or the gap you see in your field. A few sentences is plenty &mdash; we refine it together.</p>
+          </div>
+
+          <div class="field">
+            <label for="fac-teaching">What makes you a natural teacher?</label>
+            <textarea class="textarea" id="fac-teaching" name="teaching" rows="3" placeholder="How you explain, mentor, or move a room…"></textarea>
+            <p class="hint" style="margin: 5px 0 0;">Optional, but it&rsquo;s the thing we care about most. How do you make hard things land?</p>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="fac-heard">How did you hear about us?</label>
+              <input class="input" id="fac-heard" name="heardFrom" placeholder="Colleague, social, a search…" />
+            </div>
+            <div class="field">
+              <label for="fac-notes">Anything else?</label>
+              <input class="input" id="fac-notes" name="notes" placeholder="Optional" />
+            </div>
+          </div>
+
+          <div class="fc-foot">
+            <p class="hint" style="margin: 0;">We read every application personally. No spam, ever.</p>
+            <button type="submit" class="btn primary" id="submit-btn">Submit application</button>
+          </div>
+
+          <div aria-live="polite" id="form-error-slot"></div>
+        </form>
+      </div>
+
+      <div id="success-view" style="display: none;">
+        <div class="flag ok" role="status">✓ Thank you, <span id="success-name">Doctor</span> &mdash; your application is in.</div>
+        <p class="hint" style="margin-top: 12px;">
+          We read every submission ourselves. If your work and our market data
+          point to a course worth building, you&rsquo;ll hear from a real person
+          on our faculty team &mdash; usually within two weeks &mdash; to talk
+          through the concept and the providers we&rsquo;d pitch it to. No
+          automated rejections, no black hole.
+        </p>
+      </div>
+    </div>
+
+    <p class="note">
+      The faculty program is how exceptional clinicians get onto the platform
+      behind our CME course builder. Applying starts a conversation &mdash; it
+      isn&rsquo;t a commitment, and there&rsquo;s no fee to apply.
+    </p>
+  </div>
+
+  <script>
+  /*
+   * Static lead-capture.
+   *
+   * By default this shows a client-side success state (no data leaves the
+   * browser) — perfect for a preview/landing deploy on GitHub Pages.
+   *
+   * To capture real applications, set FORM_ENDPOINT to a Formspree URL
+   * (https://formspree.io — create a form, paste its endpoint) or any URL that
+   * accepts a JSON POST. When set, the form POSTs there before showing success.
+   */
+  var FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/xxxxxxx"
+
+  var form = document.getElementById("apply-form");
+  var errorSlot = document.getElementById("form-error-slot");
+  var submitBtn = document.getElementById("submit-btn");
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function showError(msg) {
+    errorSlot.innerHTML =
+      '<div class="flag warn" role="alert" style="margin-top:12px;">⚠ ' + msg + "</div>";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    errorSlot.innerHTML = "";
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) { data[k] = (v || "").toString().trim(); });
+
+    var missing = [];
+    if (!data.name) missing.push("name");
+    if (!data.email) missing.push("email");
+    if (!data.field) missing.push("specialty / field");
+    if (!data.courseIdea) missing.push("what you'd love to teach");
+    if (missing.length) { showError("Please fill in: " + missing.join(", ") + "."); return; }
+    if (!EMAIL_RE.test(data.email)) { showError("Please provide a valid email address."); return; }
+
+    function succeed() {
+      document.getElementById("success-name").textContent =
+        (data.name.split(" ")[0] || "Doctor");
+      document.getElementById("form-view").style.display = "none";
+      document.getElementById("success-view").style.display = "block";
+      document.getElementById("apply").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    if (!FORM_ENDPOINT) { succeed(); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("bad status");
+        succeed();
+      })
+      .catch(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit application";
+        showError("Could not send right now — please try again, or email us directly.");
+      });
+  });
+  </script>
+</body>
+</html>
